@@ -1,4 +1,3 @@
-# app.py
 from flask import Flask
 
 app = Flask(__name__)
@@ -7,5 +6,5 @@ app = Flask(__name__)
 def home():
     return "مرحباً بك في موقع Falaky.net!"
 
-if name == '__main__':
+if __name__ == '__main__':
     app.run(debug=True)
