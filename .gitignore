@@ -1,10 +1,12 @@
-# 1. Python Environment and Cache
-# تجاهل البيئة الافتراضية وملفات الكاش التي لا تُنشر
+# 1. Python Virtual Environment and Cache
+# تجاهل البيئات الافتراضية
 .venv
 venv/
 env/
 .env
 .envrc
+
+# تجاهل ملفات البايت كود والكاش
 __pycache__/
 *.py[codz]
 .cache
@@ -14,34 +16,23 @@ __pycache__/
 htmlcov/
 cover/
 
-# 2. Dependencies Lock File (CRITICAL for Render Deploy)
-# ملف قفل التبعيات يُضمن للنشر، لذا لا يتم تجاهله
-# إذا كنت تستخدم pipenv:
-#Pipfile.lock
-# إذا كنت تستخدم poetry:
-#poetry.lock
-# إذا كنت تستخدم pdm:
-#pdm.lock
+# 2. Deployment Critical Files (MUST NOT be Ignored)
+# ملفات يجب ضمها إلى Git لنجاح النشر:
+# requirements.txt موجود في جذر المشروع - لا يتم تجاهله
 
-# 3. Build and Distribution Files
-# تجاهل ملفات البناء والتوزيع
+# 3. Database, Logs, and Build Artifacts
+# تجاهل قواعد البيانات المحلية والسجلات
+*.log
+db.sqlite3
+db.sqlite3-journal
 build/
 dist/
 *.egg-info/
 *.egg
 
-# 4. Database, Logs, and Sensitive Files
-# تجاهل قواعد البيانات المحلية والسجلات
-*.log
-db.sqlite3
-db.sqlite3-journal
-
-# 5. IDE and Editor Settings (Optional)
-# اختر إلغاء التعليق لتجاهل إعدادات محررك الأكواد الخاص بك
-#.idea/
-#.vscode/
+# 4. IDE and Editor Settings (Optional)
+# تجاهل إعدادات محررات الأكواد - يمكن حذف هذه الأسطر إذا لم تستخدمها
+.idea/
+.vscode/
 .spyderproject
 .spyproject
-
-# 6. Jupyter/Notebooks (If applicable)
-.ipynb_checkpoints
