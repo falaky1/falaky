@@ -1,126 +1,47 @@
-أتفهم أن التعليقات الإرشادية الطويلة في ملف `.gitignore`، مثل تلك المتعلقة بـ **PyInstaller** و **pyenv** و **ملفات القفل (Lock Files)**، هي التي تسبب لك مشكلة أو تظهر كأخطاء في نظامك، ربما بسبب آليات الدمج التلقائي أو النسخ.
-
-الحل الأمثل هو حذف هذه التعليقات الطويلة تمامًا والاحتفاظ بأوامر التجاهل الضرورية فقط. لقد قمت بإزالة جميع التعليقات التي أشرت إليها وإزالة الأسطر التي تسبب المشاكل، مع الإبقاء على أوامر التجاهل الهامة وتفعيل ملفات القفل استعدادًا للنشر الناجح على Render.
-
-إليك النسخة النهائية والمُبسطة من ملف `.gitignore`:
-
-```gitignore
-# 1. Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[codz]
-*$py.class
-*.so
-
-# 2. Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# 3. PyInstaller
-*.manifest
-*.spec
-
-# 4. Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# 5. Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py.cover
-.hypothesis/
-.pytest_cache/
-cover/
-
-# 6. Translations
-*.mo
-*.pot
-
-# 7. Django, Flask, Scrapy, Sphinx, PyBuilder
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-instance/
-.webassets-cache
-.scrapy
-docs/_build/
-.pybuilder/
-target/
-
-# 8. Notebooks & Environments
-.ipynb_checkpoints
-profile_default/
-ipython_config.py
-# .python-version (pyenv)
-
-# 9. Lock Files (CRITICAL for Deployment - Active)
-Pipfile.lock
-uv.lock
-poetry.lock
-#poetry.toml
-pdm.lock
-#pdm.toml
-.pdm-python
-.pdm-build/
-pixi.lock
-.pixi
-
-# 10. Other Tools & Temporary Files
-__pypackages__/
-celerybeat-schedule
-celerybeat.pid
-*.sage.py
-
-# 11. Environments
+# 1. Python Environment and Cache
+# تجاهل البيئة الافتراضية وملفات الكاش التي لا تُنشر
+.venv
+venv/
+env/
 .env
 .envrc
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+__pycache__/
+*.py[codz]
+.cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+cover/
 
-# 12. Editor / IDE settings
+# 2. Dependencies Lock File (CRITICAL for Render Deploy)
+# ملف قفل التبعيات يُضمن للنشر، لذا لا يتم تجاهله
+# إذا كنت تستخدم pipenv:
+#Pipfile.lock
+# إذا كنت تستخدم poetry:
+#poetry.lock
+# إذا كنت تستخدم pdm:
+#pdm.lock
+
+# 3. Build and Distribution Files
+# تجاهل ملفات البناء والتوزيع
+build/
+dist/
+*.egg-info/
+*.egg
+
+# 4. Database, Logs, and Sensitive Files
+# تجاهل قواعد البيانات المحلية والسجلات
+*.log
+db.sqlite3
+db.sqlite3-journal
+
+# 5. IDE and Editor Settings (Optional)
+# اختر إلغاء التعليق لتجاهل إعدادات محررك الأكواد الخاص بك
+#.idea/
+#.vscode/
 .spyderproject
 .spyproject
-.ropeproject
-/site
-.dmypy.json
-dmypy.json
-.pyre/
-.pytype/
-cython_debug/
-# .idea/ (PyCharm)
-.abstra/
-# .vscode/ (VS Code)
-.ruff_cache/
-.pypirc
-.cursorignore
-.cursorindexingignore
-marimo/_static/
-marimo/_lsp/
-__marimo__/
-```
+
+# 6. Jupyter/Notebooks (If applicable)
+.ipynb_checkpoints
