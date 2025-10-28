@@ -1,6 +1,5 @@
 # -- coding: utf-8 --
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-from flask_cors import CORS # 1. تم استيراد CORS
+from flask import Flask, render_template, request, redirect, url_for, jsonify # تم تحديث هذا السطر
 import swisseph as swe
 from geopy.geocoders import Nominatim
 import os
@@ -19,8 +18,6 @@ import json # تمت إضافة استيراد JSON
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
-# 2. تفعيل CORS على التطبيق للسماح لجميع النطاقات بالوصول (يجب تقييدها في الإنتاج)
-CORS(app) 
 app.secret_key = os.environ.get('SESSION_SECRET', 'dev-secret-key')
 
 # --- HOROSCOPE ADMIN CONFIGURATION ---
@@ -537,7 +534,7 @@ def index():
                            error=error,
                            input_data=input_data)
 
-# --- ROUTES FOR HOROSCOPE MANAGEMENT ---
+# --- NEW ROUTES FOR HOROSCOPE MANAGEMENT ---
 
 # 1. مسار لوحة الإدارة (للعرض والتعديل)
 @app.route('/admin/horoscopes', methods=['GET', 'POST'])
@@ -584,25 +581,6 @@ def api_horoscopes():
     horoscopes = read_horoscopes()
     # يتم استخدام jsonify لضمان إرسال رأس محتوى JSON الصحيح
     return jsonify(horoscopes)
-
-
-# 3. المسار الجديد المطلوب (كمثال)
-@app.route('/api/new_endpoint', methods=['GET'])
-def new_api_endpoint():
-    """3. مسار API جديد لتجربة CORS والوصول إلى بيانات مخصصة."""
-    
-    # يمكن هنا قراءة بيانات من قاعدة بيانات، أو إجراء عملية حسابية، أو جلب معلومات محددة.
-    example_data = {
-        "status": "success",
-        "message_ar": "هذه نقطة نهاية API جديدة ومفعّلة بتقنية CORS.",
-        "data_payload": {
-            "version": "1.0.0",
-            "test_value": 42
-        }
-    }
-    
-    # إرجاع البيانات بصيغة JSON
-    return jsonify(example_data)
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الخريطة الفلكية - Falaky</title>
+    <title>حاسبة الخريطة الفلكية</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
         * { margin:0; padding:0; box-sizing:border-box; font-family: 'Cairo','Tahoma',sans-serif; }
@@ -12,14 +12,14 @@
             direction: rtl;
             min-height:100vh;
             padding:20px 15px;
-            /* التعديل هنا: استخدام تدرج لوني أفتح يمثل سماء الليل المضاءة قليلاً */
+            /* خلفية سماء الليل */
             background: linear-gradient(180deg, #1A233A 0%, #2A385C 100%);
             color:#333;
             position:relative;
             overflow-x:hidden;
         }
         
-        /* تعديل تأثير النجوم: نجوم أكبر وأكثر إضاءة */
+        /* تأثير النجوم */
         body::after {
             content: "";
             position: absolute;
@@ -27,32 +27,25 @@
             left: 0;
             width: 100%;
             height: 100%;
-            min-height: 1300px; /* تم إضافة هذا لضمان ظهور كل النجوم */
+            min-height: 1200px;
             background: transparent;
-            /* تكبير أحجام النجوم (بإضافة قيمة انتشار أكبر) */
             box-shadow: 
-                /* نجوم بعيدة (أصغر وذهبية) */
                 100px 100px 1px 1px #FFD700, 200px 300px 1px 1px #fff, 400px 500px 1px 1px #FFD700, 
                 600px 100px 1px 1px #fff, 800px 400px 1px 1px #FFD700, 1000px 200px 1px 1px #fff, 
                 1200px 500px 1px 1px #FFD700, 100px 800px 1px 1px #fff, 300px 900px 1px 1px #FFD700, 
                 500px 700px 1px 1px #fff, 700px 600px 1px 1px #FFD700, 900px 800px 1px 1px #fff, 
-                1100px 1000px 1px 1px #FFD700, 1300px 700px 1px 1px #fff, 250px 100px 1px 1px #FFD700,
-                450px 350px 1px 1px #fff, 650px 50px 1px 1px #FFD700, 850px 250px 1px 1px #fff,
-                /* نجوم قريبة (أكبر وأكثر وضوحًا وذهبية) - زيادة كبيرة في الحجم والضبابية */
-                150px 500px 5px 5px rgba(255, 215, 0, 0.9), /* ذهبية كبيرة وواضحة */
-                550px 800px 3px 3px rgba(255, 255, 255, 0.9), /* بيضاء كبيرة */
-                950px 150px 5px 5px rgba(255, 215, 0, 0.9), /* ذهبية كبيرة وواضحة */
-                1350px 350px 3px 3px rgba(255, 255, 255, 0.9), /* بيضاء كبيرة */
-                10px 1200px 5px 5px rgba(255, 215, 0, 0.9); /* ذهبية كبيرة وواضحة */
+                150px 500px 5px 5px rgba(255, 215, 0, 0.9),
+                550px 800px 3px 3px rgba(255, 255, 255, 0.9), 
+                950px 150px 5px 5px rgba(255, 215, 0, 0.9);
             z-index: 1; 
-            opacity: 1; /* إزالة شفافية النجوم لجعلها أشد وضوحًا */
+            opacity: 1;
         }
 
-        .container { max-width:1100px; width:100%; margin:0 auto; position:relative; z-index:2;
+        .container { max-width:900px; width:100%; margin:0 auto; position:relative; z-index:2;
         }
 
         .header-section{
-            padding: 40px 10px 20px;
+            padding: 40px 10px 30px;
             text-align: center;
             color: #F5F3FF;
         }
@@ -62,273 +55,276 @@
             text-shadow: 0 0 8px rgba(255,255,255,0.12);
             margin-bottom:8px;
         }
-        .header-section p{ color:#E8E1FF; max-width:780px;
+        .header-section p{ color:#E8E1FF; max-width:600px;
             margin:0 auto; line-height:1.7; }
 
-        .top-section{
-            display:flex;
-            justify-content:space-between;
-            gap:32px;
-            flex-wrap:wrap;
-            margin: 20px auto 40px;
+        .calculator-box{
             width:100%;
-            max-width:950px;
+            max-width:700px; /* تقييد عرض الحاسبة */
+            margin: 0 auto 40px;
             padding:28px;
-            background: rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.12); /* خلفية شفافة داخلية */
             border-radius:18px;
             backdrop-filter: blur(5px);
-            box-shadow: 0 4px 25px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+            border:1px solid rgba(255,255,255,0.1);
+        }
+        .box-title{ 
+            text-align:center; 
+            color:#FFD700; /* لون ذهبي للعنوان */
+            font-weight:700; 
+            margin-bottom:20px;
+            font-size: 24px;
+            text-shadow: 0 0 5px rgba(255,215,0,0.5);
         }
 
-        .calculator-box, .daily-horoscopes.box{
-            flex:1;
-            min-width:420px;
-            background: rgba(255,255,255,0.95);
-            border-radius:14px;
-            padding:22px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-            border:1px solid rgba(0,0,0,0.06);
-            min-height:540px;
+        /* تنسيق النموذج */
+        form { width:100%; margin:0; }
+        .form-row { display:grid; grid-template-columns: repeat(4,1fr); gap:15px; margin-bottom:18px; }
+        .form-row.double { grid-template-columns: 1fr 1fr; }
+        .form-group { position:relative; }
+        
+        label { 
+            display:block; 
+            font-size:14px; 
+            font-weight:700; 
+            color:#F0F0F0; /* لون فاتح لتناسق الخلفية الداكنة */
+            margin-bottom:6px;
         }
-        .box-title{ text-align:center; color:#6A5ACD; font-weight:700; margin-bottom:12px;
-        }
-
-        form { width:100%; max-width: none; margin:0;
-        }
-        .form-row { display:grid; grid-template-columns: repeat(4,1fr); gap:12px; margin-bottom:14px;
-        }
-        .form-row.double { grid-template-columns: 1fr 1fr;
-        }
-        .form-group { position:relative;
-        }
-        label { display:block; font-size:14px; font-weight:700; color:#333; margin-bottom:6px;
-        }
+        
         input, select {
             width:100%;
-            padding:10px 12px; border:1px solid #CCC; border-radius:8px;
-            font-size:15px; background:#F8F8F8; color:#333; transition: box-shadow .2s, border-color .2s;
+            padding:12px; 
+            border:1px solid #4A567A; 
+            border-radius:8px;
+            font-size:16px; 
+            background:#1A233A; /* خلفية داكنة للحقول */
+            color:#fff; 
+            transition: box-shadow .2s, border-color .2s;
         }
-        input:focus, select:focus { outline:none; border-color:#9370DB; box-shadow:0 0 8px rgba(147,112,219,0.18);
+        input:focus, select:focus { 
+            outline:none; 
+            border-color:#BA55D3; 
+            box-shadow:0 0 10px rgba(186,85,211,0.5);
         }
 
         .btn{
             display:block;
             width:100%;
-            padding:12px;
+            padding:14px;
             border-radius:8px;
             border:none;
+            /* تدرج لوني بنفسجي لامع */
             background: linear-gradient(90deg,#9370DB 0%,#BA55D3 100%);
-            color:#fff; font-size:18px; font-weight:700; cursor:pointer;
-            margin-top:10px;
+            color:#fff; 
+            font-size:20px; 
+            font-weight:700; 
+            cursor:pointer;
+            margin-top:20px;
+            box-shadow: 0 4px 15px rgba(186,85,211,0.4);
             transition: transform .18s, box-shadow .18s;
         }
-        .btn:hover{ transform: translateY(-2px); box-shadow: 0 6px 18px rgba(147,112,219,0.18);
-        }
-
-        .horoscope-grid { display:grid; grid-template-columns: repeat(4,1fr); gap:12px; margin-top:14px;
-        }
-        .zodiac-item{ background:#fff; border-radius:10px; padding:10px 6px; text-align:center; border:1px solid #E8E8E8;
-        box-shadow:0 2px 6px rgba(0,0,0,0.05); cursor:pointer; }
-        .zodiac-item span.symbol{ font-size:28px; color:#FFD700; display:block; margin-bottom:6px;
-        }
-        .zodiac-item p{ margin:0; font-size:14px; color:#333;
-        }
-
-        .horoscope-btn {
-            background: linear-gradient(90deg,#9370DB 0%,#BA55D3 100%);
-        color:#fff; border:none; padding:10px 25px; border-radius:6px; margin-top:25px; font-weight:700;
-            cursor:pointer; display:block; margin-left:auto; margin-right:auto;
-        }
-        .horoscope-btn:hover { opacity:0.95;
+        .btn:hover{ 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(186,85,211,0.6);
         }
 
         .error {
-            color:#D32F2F;
-        text-align:center; background:#FFEBEE; padding:10px; border-radius:8px;
-            margin:15px auto; max-width:600px; font-weight:700; border:1px solid #EF9A9A;
+            color:#FFEBEE;
+            background:#D32F2F; 
+            padding:10px; 
+            border-radius:8px;
+            margin:15px auto; 
+            max-width:600px; 
+            font-weight:700; 
+            border:1px solid #EF9A9A;
+            text-align: center;
         }
 
-        .result{ max-width:900px; margin:18px auto 40px; background:#fff; padding:18px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06);
-        border:1px solid #EEE; }
-        .info-box{ background:#F8F8F8; padding:10px; border-radius:8px; text-align:center; color:#555; margin-bottom:12px;
+        /* قسم النتائج */
+        .result{ 
+            max-width:900px; 
+            margin:30px auto 60px; 
+            background:rgba(255,255,255,0.98); 
+            padding:25px; 
+            border-radius:18px; 
+            box-shadow:0 10px 30px rgba(0,0,0,0.1);
+            border:1px solid #EEE; 
+        }
+        .info-box{ 
+            background:#F0F4F8; 
+            padding:15px; 
+            border-radius:10px; 
+            text-align:center; 
+            color:#444; 
+            margin-bottom:20px;
+            font-size: 15px;
         }
 
-        table{ width:100%; border-collapse:collapse; font-size:14px; margin-top:12px;
+        table{ 
+            width:100%; 
+            border-collapse:collapse; 
+            font-size:15px; 
+            margin-top:20px;
         }
-        th, td{ padding:10px 6px; border:1px solid #EEE; text-align:center;
+        th, td{ 
+            padding:12px 8px; 
+            border:1px solid #E5E5E5; 
+            text-align:center;
         }
-        th{ background:#FAFAFA; color:#333; font-weight:700;
+        th{ 
+            background:#E8E1FF; 
+            color:#6A5ACD; 
+            font-weight:700;
         }
-        tr:nth-child(even) { background:#FBFBFB;
+        tr:nth-child(even) { 
+            background:#F9F9F9;
         }
-        tr:hover { background:#F6F6F6;
+        tr:hover { 
+            background:#F3F3F3;
         }
 
-        .result h2, .result h3 { color:#6A5ACD; margin-top:20px; margin-bottom:12px; text-align:center;
+        .result h2, .result h3 { 
+            color:#6A5ACD; 
+            margin-top:30px; 
+            margin-bottom:15px; 
+            text-align:center;
+            border-bottom: 2px solid #EEE;
+            padding-bottom: 8px;
         }
 
-        img { display:block; max-width:100%; margin:18px auto; border-radius:10px; border:2px solid #6A5ACD;
-        box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+        img { 
+            display:block; 
+            max-width:100%; 
+            margin:25px auto; 
+            border-radius:15px; 
+            border:3px solid #6A5ACD;
+            box-shadow:0 10px 30px rgba(0,0,0,0.1); 
+        }
 
-        .planet-symbol { font-size:20px; font-weight:700; color:#FFD700;
+        .chart-placeholder {
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: #F0F4F8; /* لون فاتح للخلفية */
+            color: #6A5ACD; /* لون بنفسجي للنص */
+            border-radius: 15px;
+            margin: 25px auto;
+            border: 3px dashed #BA55D3; /* إطار متقطع بنفسجي */
+            font-weight: 700;
+            font-size: 18px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .chart-placeholder strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .planet-symbol { 
+            font-size:22px; 
+            font-weight:700; 
+            color:#FFD700;
         }
 
         .dst-notice {
-            background:#E8F5E9;
-        padding:10px; border-radius:8px; margin:10px 0;
-            text-align:center; color:#2E7D32; border:1px solid #81C784;
+            background:#FFF3CD;
+            padding:15px; 
+            border-radius:10px; 
+            margin:15px 0;
+            text-align:center; 
+            color:#856404; 
+            border:1px solid #FFEEBA;
+            font-weight: bold;
         }
 
-        .content-section-title{ text-align:center; font-size:28px;
-        font-weight:700; color:#F5F3FF; margin:28px 0 12px; text-shadow:0 0 6px rgba(255,255,255,0.12); }
-        .articles-grid{ display:grid;
-        grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:18px; max-width:900px; margin:8px auto 50px; }
-        .article-card{ background:#fff; border-radius:10px; overflow:hidden;
-        box-shadow:0 6px 18px rgba(0,0,0,0.06); border:1px solid #EEE; }
-        .article-card img{ width:100%; height:150px; object-fit:cover;
-        background:#E0E0E0; }
-        .article-card-content{ padding:12px;
+        /* تصميم الاستجابة */
+        @media (max-width:768px){
+            .header-section h1{ font-size:30px; }
+            .calculator-box{ padding:20px; }
+            .form-row{ grid-template-columns: repeat(2,1fr); gap:10px; }
+            .form-row.double{ grid-template-columns: 1fr; }
+            input, select, .btn{ padding:10px; font-size:16px; }
+            th, td{ padding:8px 4px; font-size:13px; }
         }
-        .article-card-content h3{ color:#6A5ACD; margin-bottom:8px; font-size:18px;
-        }
-        .article-card-content p{ color:#555; font-size:13px; line-height:1.45;
-        }
-
-        @media (max-width:950px){
-            .top-section{ padding:20px;
-        gap:18px; }
-            .calculator-box, .daily-horoscopes.box{ min-width:340px;
-        }
-            .form-row{ grid-template-columns: repeat(2,1fr);
-        }
-            .horoscope-grid{ grid-template-columns: repeat(3,1fr);
-        }
-        }
-        @media (max-width:640px){
-            .top-section{ flex-direction:column;
-        align-items:center; }
-            .calculator-box, .daily-horoscopes.box{ width:100%; min-width:auto;
-        }
-            .form-row{ grid-template-columns:1fr;
-        }
-            .horoscope-grid{ grid-template-columns: repeat(3,1fr);
-        }
+        @media (max-width:480px){
+            .form-row{ grid-template-columns:1fr; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header-section">
-            <h1>اكتشف أسرار شخصيتك من خلال خريطتك الفلكية!</h1>
-            <p>أدخل تفاصيل ميلادك واحصل على تقرير فلكي مُبسط يوضح طالعك وبرجك الشمسي وتأثير الكواكب عليك.</p>
+            <h1>اكتشف خريطتك الفلكية!</h1>
+            <p>أدخل تفاصيل ميلادك الدقيقة (التاريخ، الوقت، والمكان) للحصول على تقرير فلكي شامل.</p>
         </div>
 
-        <div class="top-section">
-            <div 
-        class="calculator-box">
-                <form method="post">
-                    <h2 class="box-title">🪐 حاسبة الخريطة الفلكية</h2>
-                    <div class="form-row">
-                        <div class="form-group">
-             
-                        <label for="day">اليوم:</label>
-                            <input type="number" id="day" name="day" min="1" max="31" value="{{ input_data.day if input_data else '' }}" required>
-                        </div>
-                   
+        <div class="calculator-box">
+            <form method="post">
+                <h2 class="box-title">🪐 حاسبة الخريطة الفلكية</h2>
+                <div class="form-row">
                     <div class="form-group">
-                            <label for="month">الشهر:</label>
-                            <input type="number" id="month" name="month" min="1" max="12" value="{{ input_data.month if input_data else '' }}" required>
-                        
+                        <label for="day">اليوم:</label>
+                        <input type="number" id="day" name="day" min="1" max="31" value="{{ input_data.day if input_data else '' }}" required>
                     </div>
-                        <div class="form-group">
-                            <label for="year">السنة:</label>
-                            <input type="number" id="year" name="year" value="{{ input_data.year if input_data else '' }}" required>
-       
-                        </div>
-                        <div class="form-group">
-                            <label for="house_system">نظام البيوت:</label>
-                            
+                    <div class="form-group">
+                        <label for="month">الشهر:</label>
+                        <input type="number" id="month" name="month" min="1" max="12" value="{{ input_data.month if input_data else '' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">السنة:</label>
+                        <input type="number" id="year" name="year" value="{{ input_data.year if input_data else '' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="house_system">نظام البيوت:</label>
                         <select id="house_system" name="house_system">
-                                <option value="P" {% if input_data and input_data.get('house_system') == 'P' %}selected{% elif not input_data %}selected{% endif %}>بلاسيدوس</option>
-                                <option value="W" {% if input_data and input_data.get('house_system') == 'W' %}selected{% endif %}>البرج الكامل</option>
-       
+                            <option value="P" {% if input_data and input_data.get('house_system') == 'P' %}selected{% elif not input_data %}selected{% endif %}>بلاسيدوس</option>
+                            <option value="W" {% if input_data and input_data.get('house_system') == 'W' %}selected{% endif %}>البرج الكامل</option>
                             <option value="E" {% if input_data and input_data.get('house_system') == 'E' %}selected{% endif %}>البيوت المتساوية</option>
-                                <option value="K" {% if input_data and input_data.get('house_system') == 'K' %}selected{% endif %}>كوخ</option>
-                    
-                            </select>
-                        </div>
+                            <option value="K" {% if input_data and input_data.get('house_system') == 'K' %}selected{% endif %}>كوخ</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="form-row double">
-                        <div class="form-group">
- 
-                            <label for="hour">الساعة (24):</label>
-                            <input type="number" id="hour" name="hour" min="0" max="23" value="{{ input_data.hour if input_data else '' }}" required>
-                        </div>
-      
-                        <div class="form-group">
-                            <label for="minute">الدقيقة:</label>
-                            <input type="number" id="minute" name="minute" min="0" max="59" value="{{ input_data.minute if input_data else '' }}" required>
-           
-                        </div>
+                <div class="form-row double">
+                    <div class="form-group">
+                        <label for="hour">الساعة (24):</label>
+                        <input type="number" id="hour" name="hour" min="0" max="23" value="{{ input_data.hour if input_data else '' }}" required>
                     </div>
+                    <div class="form-group">
+                        <label for="minute">الدقيقة:</label>
+                        <input type="number" id="minute" name="minute" min="0" max="59" value="{{ input_data.minute if input_data else '' }}" required>
+                    </div>
+                </div>
 
-                    <div class="form-row double">
-                        <div class="form-group">
-                    
+                <div class="form-row double">
+                    <div class="form-group">
                         <label for="city">المدينة:</label>
-                            <input type="text" id="city" name="city" value="{{ input_data.city if input_data else '' }}" autocomplete="off" required>
-                        </div>
-                        <div class="form-group">
-  
-                            <label for="country">الدولة:</label>
-                            <input type="text" id="country" name="country" value="{{ input_data.country if input_data else '' }}" required>
-                        </div>
-          
-                        </div>
-
-                    <button class="btn" type="submit">احسب خريطتي</button>
-                </form>
-
-                {% if error %}
-                    <div class="error" style="margin-top:12px;">{{ error }}</div>
-        
-                {% endif %}
-            </div>
-
-            <div class="daily-horoscopes box">
-                <h2 class="box-title">الأبراج اليومية</h2>
-                <p style="color:#555;
-        text-align:center; margin-top:6px;">انقر على برجك لقراءة توقعات اليوم.</p>
-                <div class="horoscope-grid" id="horoscope-grid">
-                    <div class="zodiac-item" data-sign="aries"><span class="symbol">♈</span><p>الحمل</p></div>
-                    <div class="zodiac-item" data-sign="taurus"><span class="symbol">♉</span><p>الثور</p></div>
-                    <div class="zodiac-item" data-sign="gemini"><span class="symbol">♊</span><p>الجوزاء</p></div>
-            
-                    <div class="zodiac-item" data-sign="cancer"><span class="symbol">♋</span><p>السرطان</p></div>
-                    <div class="zodiac-item" data-sign="leo"><span class="symbol">♌</span><p>الأسد</p></div>
-                    <div class="zodiac-item" data-sign="virgo"><span class="symbol">♍</span><p>العذراء</p></div>
-                    <div class="zodiac-item" data-sign="libra"><span class="symbol">♎</span><p>الميزان</p></div>
-                    <div class="zodiac-item" data-sign="scorpio"><span class="symbol">♏</span><p>العقرب</p></div>
-  
-                    <div class="zodiac-item" data-sign="sagittarius"><span class="symbol">♐</span><p>القوس</p></div>
-                    <div class="zodiac-item" data-sign="capricorn"><span class="symbol">♑</span><p>الجدي</p></div>
-                    <div class="zodiac-item" data-sign="aquarius"><span class="symbol">♒</span><p>الدلو</p></div>
-                    <div class="zodiac-item" data-sign="pisces"><span class="symbol">♓</span><p>الحوت</p></div>
+                        <input type="text" id="city" name="city" value="{{ input_data.city if input_data else '' }}" autocomplete="off" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">الدولة:</label>
+                        <input type="text" id="country" name="country" value="{{ input_data.country if input_data else '' }}" required>
+                    </div>
                 </div>
 
-                <div id="horoscope-display" style="margin-top: 20px; padding: 15px; background: #fdfdfd; border-radius: 8px; border: 1px solid #EEE; min-height: 150px; display: none;">
-                    <h3 id="display-title" style="color: #6A5ACD; margin-bottom: 10px; text-align: center;"></h3>
-                    <p id="display-content" style="color: #333; line-height: 1.6;"></p>
-                </div>
-            </div>
+                <button class="btn" type="submit">احسب خريطتي الفلكية</button>
+            </form>
+
+            {% if error %}
+                <div class="error" style="margin-top:12px;">{{ error }}</div>
+            {% endif %}
         </div>
 
         {% if result %}
         <div class="result">
-            <h2>📍 {{ result.location }}</h2>
+            <h2>📍 نتائج الخريطة الفلكية لـ {{ result.location }}</h2>
             <div class="info-box">
-           
                 <strong>الوقت المحلي:</strong> {{ result.local_time }} |
                 <strong>المنطقة الزمنية:</strong> {{ result.timezone }}<br>
                 <strong>وقت UTC:</strong> {{ result.utc_time }}
@@ -339,19 +335,16 @@
             {% endif %}
 
             <h3>⭐ الزوايا الرئيسية</h3>
-      
-                <table>
+            <table>
                 <tr>
                     <th>الزاوية</th><th>الاسم بالعربية</th><th>الدرجة الكلية</th><th>الدرجة في البرج</th><th>البرج</th><th>الرمز</th>
                 </tr>
                 {% for key, angle in result.angles.items() %}
-                
                 <tr>
                     <td><strong>{{ key }}</strong></td>
                     <td>{{ angle.name_ar }}</td>
                     <td>{{ "%.2f°"|format(angle.degree) }}</td>
                     <td>{{ "%.2f°"|format(angle.sign_info.degree_in_sign) }}</td>
-            
                     <td>{{ angle.sign_info.sign_ar }}</td>
                     <td class="planet-symbol">{{ angle.sign_info.sign_symbol }}</td>
                 </tr>
@@ -359,19 +352,16 @@
             </table>
 
             <h3>🪐 مواقع الكواكب</h3>
-       
-                <table>
+            <table>
                 <tr><th>الكوكب</th><th>الرمز</th><th>الدرجة الكلية</th><th>الدرجة في البرج</th><th>البرج</th><th>رمز البرج</th><th>البيت</th></tr>
                 {% for planet in result.planets %}
                 <tr>
                     <td>{{ planet.name_ar }}</td>
-                
                     <td class="planet-symbol">{{ planet.symbol }}</td>
                     <td>{{ "%.2f°"|format(planet.degree) }}</td>
                     <td>{{ "%.2f°"|format(planet.degree_in_sign) }}</td>
                     <td>{{ planet.sign_ar }}</td>
                     <td class="planet-symbol">{{ planet.sign_symbol }}</td>
-    
                     <td><strong>{{ planet.house }}</strong></td>
                 </tr>
                 {% endfor %}
@@ -379,109 +369,32 @@
 
             <h3>🏠 البيوت الفلكية (نظام: {{ result.house_system }})</h3>
             <table>
-      
                 <tr><th>البيت</th><th>الاسم</th><th>الدرجة الكلية</th><th>الدرجة في البرج</th><th>البرج</th><th>الرمز</th></tr>
                 {% for house in result.houses_info %}
                 <tr>
                     <td><strong>{{ house.house }}</strong></td>
                     <td>{{ house.name_ar }}</td>
-      
                     <td>{{ "%.2f°"|format(house.degree) }}</td>
                     <td>{{ "%.2f°"|format(house.degree_in_sign) }}</td>
                     <td>{{ house.sign_ar }}</td>
+                    <!-- تم تصحيح الخطأ هنا: أصبح الوصول مباشرًا لـ sign_symbol -->
                     <td class="planet-symbol">{{ house.sign_symbol }}</td>
                 </tr>
- 
                 {% endfor %}
             </table>
 
-            <h3>🌌 الخريطة الفلكية</h3>
-            <img src="data:image/png;base64,{{ chart }}" alt="الخريطة الفلكية">
+            <h3>🌌 الخريطة الفلكية المصورة</h3>
+            {% if chart %}
+                <img src="data:image/png;base64,{{ chart }}" alt="الخريطة الفلكية">
+            {% else %}
+                <div class="chart-placeholder">
+                    <strong>⚠️ لا يمكن عرض الخريطة البيانية في العرض التمهيدي</strong><br>
+                    سيتم إنشاء هذه الصورة بشكل ديناميكي بواسطة تطبيق Flask (Python) عند تشغيل التطبيق.
+                </div>
+            {% endif %}
         </div>
         {% endif %}
-
-        <h2 class="content-section-title">مقالات فلكية</h2>
-        <p style="text-align:center;
-        color:#E8E1FF; margin-bottom:14px;">أحدث المقالات والرؤى الفلكية.</p>
-
-        <div class="articles-grid">
-            <div class="article-card">
-                <img src="https://via.placeholder.com/300x150/6A5ACD/FFFFFF?text=علم+الفلك" alt="علم الفلك وتأثير الكواكب">
-                <div class="article-card-content">
-                    <h3>علم الفلك وتأثير الكواكب</h3>
-             
-                        <p>فهم كيفية ارتباط مواقع الكواكب وبروجها وتأثيرها على الشخصيات.</p>
-                </div>
-            </div>
-
-            <div class="article-card">
-                <img src="https://via.placeholder.com/300x150/9370DB/FFFFFF?text=البرج+الشمسي" alt="فهم برجك الشمسي">
-                <div class="article-card-content">
-       
-                    <h3>فهم برجك الشمسي</h3>
-                    <p>اقرأ أساسيات برجك، وعناصره، وصفات كل برج من الأبراج.</p>
-                </div>
-            </div>
-
-            <div class="article-card">
-                
-                <img src="https://via.placeholder.com/300x150/BA55D3/FFFFFF?text=التوافق+الفلكي" alt="التوافق الفلكي">
-                <div class="article-card-content">
-                    <h3>التوافق الفلكي</h3>
-                    <p>اكتشف رحلة توأم روحك وعلاقتكما ببعضكما، وكيفية التفاهم بين الأبراج.</p>
-                </div>
-            </div>
-  
-                </div>
     </div>
-
-    <script>
-        // 1. قائمة الأبراج اليومية (يمكنك استبدال هذا برابط API لجلب البيانات من مصدر خارجي)
-        const dailyHoroscopes = {
-            'aries': { title: 'برج الحمل (اليوم)', content: 'اليوم مليء بالطاقة والفرص لبدء مشاريع جديدة. ثقتك بنفسك في أوجها، استغلها بحكمة.' },
-            'taurus': { title: 'برج الثور (اليوم)', content: 'ركز على الجانب المالي، هناك فرصة لكسب مادي غير متوقع. استمتع بوقتك في المنزل وحافظ على هدوئك.' },
-            'gemini': { title: 'برج الجوزاء (اليوم)', content: 'تواصلك الاجتماعي سيجلب لك أخباراً سعيدة. استغل مهاراتك في الإقناع وشارك أفكارك مع المحيطين بك.' },
-            'cancer': { title: 'برج السرطان (اليوم)', content: 'العائلة والأمور الشخصية هي محور اهتمامك. لا تتردد في طلب الدعم من أحبائك، فالمنزل هو ملاذك.' },
-            'leo': { title: 'برج الأسد (اليوم)', content: 'تشعر نفسك اليوم بأنك متجحشن اكثر من الايام السابقة, انصحك بتخفيف جحشنتك قليلا والابتعاد عن الجحشونين الذين مثلك.' },
-            'virgo': { title: 'برج العذراء (اليوم)', content: 'انتبه للتفاصيل الصغيرة في مهامك. الصحة واللياقة البدنية تتطلب بعض الاهتمام لتبقى نشيطاً.' },
-            'libra': { title: 'برج الميزان (اليوم)', content: 'العلاقات والشراكات مزدهرة. اليوم مثالي لتحقيق التوازن واتخاذ القرارات العادلة التي ترضي الجميع.' },
-            'scorpio': { title: 'برج العقرب (اليوم)', content: 'تحول داخلي يلوح في الأفق. تجنب الصراعات وركز طاقتك على الأهداف العميقة التي تسعى لتحقيقها.' },
-            'sagittarius': { title: 'برج القوس (اليوم)', content: 'سفر، تعلم، واستكشاف آفاق جديدة. تفكيرك الفلسفي يساعدك على رؤية الصورة الكبرى في الحياة.' },
-            'capricorn': { title: 'برج الجدي (اليوم)', content: 'المسؤوليات المهنية في المقدمة. عملك الجاد سيؤتي ثماره قريباً، لكن لا تهمل الجانب الشخصي والراحة.' },
-            'aquarius': { title: 'برج الدلو (اليوم)', content: 'التجمعات الاجتماعية والأصدقاء يجلبون لك السعادة. فكرة غير تقليدية منك ستحل مشكلة قديمة.' },
-            'pisces': { title: 'برج الحوت (اليوم)', content: 'استمع إلى حدسك. الإبداع والخيال هما مفتاحك لليوم. خذ وقتاً للراحة والتأمل والاسترخاء.' }
-        };
-
-        const horoscopeItems = document.querySelectorAll('.zodiac-item');
-        const displayBox = document.getElementById('horoscope-display');
-        const displayTitle = document.getElementById('display-title');
-        const displayContent = document.getElementById('display-content');
-
-        // 2. معالج حدث النقر لعناصر الأبراج
-        horoscopeItems.forEach(item => {
-            item.addEventListener('click', function() {
-                // الحصول على مفتاح البرج (data-sign)
-                const sign = this.getAttribute('data-sign');
-                
-                // الحصول على بيانات التوقع
-                const horoscopeData = dailyHoroscopes[sign];
-
-                // تحديث منطقة العرض
-                if (horoscopeData) {
-                    displayTitle.textContent = horoscopeData.title;
-                    displayContent.textContent = horoscopeData.content;
-                    displayBox.style.display = 'block'; // إظهار صندوق العرض
-                    
-                    // إزالة التظليل عن جميع العناصر
-                    horoscopeItems.forEach(i => i.style.border = '1px solid #E8E8E8');
-                    // تظليل العنصر النشط
-                    this.style.border = '2px solid #9370DB';
-                    
-                    // التمرير إلى منطقة العرض (اختياري)
-                    displayBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }
-            });
-        });
-    </script>
+    
 </body>
 </html>
