@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة نشر الأبراج</title>
+    <style>
+        body { font-family: 'Cairo', Tahoma, sans-serif; background-color: #f4f4f9; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #6A5ACD; text-align: center; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #333; }
+        textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; min-height: 100px; box-sizing: border-box; resize: vertical; }
+        button { background: linear-gradient(90deg, #9370DB 0%, #BA55D3 100%); color: white; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 700; width: 100%; transition: opacity 0.3s; }
+        button:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>لوحة نشر الأبراج اليومية ✍️</h1>
+        <p style="text-align: center; color: #777; margin-bottom: 20px;">قم بتحديث توقعات الأبراج ثم اضغط على حفظ.</p>
+        
+        <form method="POST" action="{{ url_for('admin_horoscopes', password=admin_password) }}">
+            
+            {% for sign, data in horoscopes.items() %}
+                <div class="form-group">
+                    <label for="{{ sign }}_content">توقعات برج: {{ data.title }}</label>
+                    <textarea id="{{ sign }}_content" name="{{ sign }}_content">{{ data.content }}</textarea>
+                </div>
+            {% endfor %}
+            
+            <button type="submit">حفظ ونشر التوقعات المحدثة</button>
+        </form>
+    </div>
+</body>
+</html>

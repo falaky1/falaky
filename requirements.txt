@@ -1,2 +1,6 @@
 Flask==2.2.5
 gunicorn==21.2.0
+pyswisseph
+geopy
+timezonefinder
+pytz

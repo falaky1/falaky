@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفسير خريطتك الشخصية - Falaky</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Cairo','Tahoma',sans-serif; }
+        body {
+            direction: rtl;
+            min-height:100vh;
+            padding:20px 15px;
+            background: radial-gradient(ellipse at top, #719FBC 0%, #4B79A1 60%, #305877 100%);
+            color:#333;
+        }
+        .container { max-width:1100px; width:100%; margin:0 auto; }
+        .header-section{
+            padding: 40px 10px 20px;
+            text-align: center;
+            color: #F5F3FF;
+        }
+        .header-section h1{
+            font-size:36px; font-weight:700; color:#F5F3FF;
+            text-shadow: 0 0 8px rgba(255,255,255,0.12);
+            margin-bottom:8px;
+        }
+        .header-section p{ color:#E8E1FF; max-width:780px; margin:0 auto; line-height:1.7; }
+        .content-section { background:#fff; padding:20px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06); margin-top:20px; }
+        h2,h3 { color:#6A5ACD; text-align:center; margin-bottom:12px; }
+        table { width:100%; border-collapse:collapse; margin-top:12px; font-size:14px; }
+        th, td { padding:10px 6px; border:1px solid #EEE; text-align:center; }
+        th { background:#FAFAFA; font-weight:700; }
+        tr:nth-child(even) { background:#FBFBFB; }
+        img { display:block; max-width:100%; margin:18px auto; border-radius:10px; border:2px solid #6A5ACD; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+        .planet-symbol { font-size:20px; font-weight:700; color:#FFD700; }
+        .btn-back {
+            display:block;
+            width:180px;
+            margin:20px auto 0;
+            padding:12px;
+            background:#9370DB;
+            color:#fff;
+            font-weight:700;
+            text-align:center;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            text-decoration:none;
+        }
+        .btn-back:hover { opacity:0.95; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-section">
+            <h1>تفسير خريطتك الشخصية</h1>
+            <p>استعرض خريطتك الفلكية والتفسيرات المفصلة لمواقع الكواكب والبيوت والأبراج.</p>
+        </div>
+
+        <div class="content-section">
+            {% if result %}
+                <h2>📍 {{ result.location }}</h2>
+                <div style="text-align:center; margin-bottom:15px;">
+                    <strong>الوقت المحلي:</strong> {{ result.local_time }} |
+                    <strong>المنطقة الزمنية:</strong> {{ result.timezone }} |
+                    <strong>وقت UTC:</strong> {{ result.utc_time }}
+                </div>
+
+                {% if result.dst_notice %}
+                    <div style="background:#E8F5E9; padding:10px; border-radius:8px; margin:10px 0; text-align:center; color:#2E7D32; border:1px solid #81C784;">
+                        {{ result.dst_notice }}
+                    </div>
+                {% endif %}
+
+                <h3>🪐 مواقع الكواكب</h3>
+                <table>
+                    <tr><th>الكوكب</th><th>الرمز</th><th>الدرجة الكلية</th><th>الدرجة في البرج</th><th>البرج</th><th>رمز البرج</th><th>البيت</th></tr>
+                    {% for planet in result.planets %}
+                    <tr>
+                        <td>{{ planet.name_ar }}</td>
+                        <td class="planet-symbol">{{ planet.symbol }}</td>
+                        <td>{{ "%.2f°"|format(planet.degree) }}</td>
+                        <td>{{ "%.2f°"|format(planet.degree_in_sign) }}</td>
+                        <td>{{ planet.sign_ar }}</td>
+                        <td class="planet-symbol">{{ planet.sign_symbol }}</td>
+                        <td><strong>{{ planet.house }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <h3>🏠 البيوت الفلكية (نظام: {{ result.house_system }})</h3>
+                <table>
+                    <tr><th>البيت</th><th>الاسم</th><th>الدرجة الكلية</th><th>الدرجة في البرج</th><th>البرج</th><th>الرمز</th></tr>
+                    {% for house in result.houses_info %}
+                    <tr>
+                        <td><strong>{{ house.house }}</strong></td>
+                        <td>{{ house.name_ar }}</td>
+                        <td>{{ "%.2f°"|format(house.degree) }}</td>
+                        <td>{{ "%.2f°"|format(house.degree_in_sign) }}</td>
+                        <td>{{ house.sign_ar }}</td>
+                        <td class="planet-symbol">{{ house.sign_symbol }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <h3>🌌 الخريطة الفلكية</h3>
+                <img src="data:image/png;base64,{{ chart }}" alt="الخريطة الفلكية">
+            {% else %}
+                <p style="text-align:center; color:#555;">لم يتم إدخال بيانات بعد. عد إلى الصفحة الرئيسية لإدخال معلومات ميلادك.</p>
+            {% endif %}
+
+            <a href="/" class="btn-back">العودة إلى الصفحة الرئيسية</a>
+        </div>
+    </div>
+</body>
+</html>
