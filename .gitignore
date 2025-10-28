@@ -1,14 +1,14 @@
 # ------------------------
-# Python bytecode / cache
+# Python bytecode
 # ------------------------
 __pycache__/
 *.py[cod]
+*$py.class
 
 # ------------------------
-# Build / packaging
+# Build / Packaging
 # ------------------------
 build/
-develop-eggs/
 dist/
 downloads/
 eggs/
@@ -19,10 +19,34 @@ parts/
 sdist/
 var/
 wheels/
+*.whl
+*.manifest
+*.spec
 *.egg-info/
-.installed.cfg
 *.egg
 MANIFEST
+
+# ------------------------
+# Environments
+# ------------------------
+.env
+.env.local
+.venv/
+venv/
+env/
+ENV/
+
+# ------------------------
+# Logs / cache
+# ------------------------
+*.log
+pip-log.txt
+pip-delete-this-directory.txt
+*.coverage
+.coverage.*
+.cache
+.dmypy.json
+htmlcov/
 
 # ------------------------
 # Flask / Python tools
@@ -30,17 +54,10 @@ MANIFEST
 instance/
 .webassets-cache
 .pytest_cache/
-htmlcov/
 .mypy_cache/
-.dmypy.json
 .pyre/
 .pytype/
 cython_debug/
-
-# ------------------------
-# Logs
-# ------------------------
-*.log
 
 # ------------------------
 # IDEs / Editors
@@ -63,11 +80,8 @@ Thumbs.db
 .ipynb_checkpoints/
 
 # ------------------------
-# Environment
+# Optional / Tools
 # ------------------------
-.env
-.env.local
-.venv/
-venv/
-ENV/
-env/
+__pypackages__/
+celerybeat-schedule
+celerybeat.pid
